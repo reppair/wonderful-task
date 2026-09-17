@@ -101,3 +101,7 @@ it('falls back to the bundled json file when no source url is configured', funct
         ->languages->toBe(['Italian'])
         ->rating->toBe(3.2);
 });
+
+it('is scheduled to run daily', function () {
+    $this->artisan('schedule:list')->expectsOutputToContain('doctors:ingest');
+});
