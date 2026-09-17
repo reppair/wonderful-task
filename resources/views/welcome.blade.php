@@ -94,7 +94,7 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative pt-10 lg:pt-28 lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/364] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
+                <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative px-6 pt-10 lg:px-10 lg:pt-28 lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/364] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
                     {{-- Laravel Logo --}}
                     <svg class="w-full text-[#F53003] dark:text-[#F61500] transition-all translate-y-0 opacity-100 max-w-none duration-750 starting:opacity-0 motion-safe:starting:translate-y-6" viewBox="0 0 438 104" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.2036 -3H0V102.197H49.5189V86.7187H17.2036V-3Z" fill="currentColor" />
@@ -107,7 +107,7 @@
                     </svg>
 
                     {{-- 13 --}}
-                    <svg class="w-[80%] mx-auto relative -mt-16 lg:-mt-[5.3rem] [--stroke-color:#1B1B18] dark:[--stroke-color:#FF750F]" viewBox="0 0 440 392" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-[80%] mx-auto relative -mt-14 lg:-mt-[4.3rem] [--stroke-color:#1B1B18] dark:[--stroke-color:#FF750F]" viewBox="0 0 440 392" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g class="mix-blend-darken dark:mix-blend-normal transition-all delay-300 opacity-100 duration-750 starting:opacity-0 text-[#1B1B18] dark:text-black">
                             <mask id="path-1-mask" maskUnits="userSpaceOnUse" x="-0.328613" y="103" width="338" height="299" fill="black">
                                 <rect fill="white" x="-0.328613" y="103" width="338" height="299"/>
