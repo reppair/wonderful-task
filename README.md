@@ -38,11 +38,13 @@ Column names follow the export's spelling (`speciality`, `county` — Romanian c
 
 `GET /api/doctors` accepts, all optional:
 
-| Param | Meaning |
-| --- | --- |
-| `q` | free text, matched against `first_name`, `last_name`, `clinic_name`, `location`, `speciality`, `county` |
-| `clinic_name`, `speciality`, `county`, `location` | exact, scoped filters (AND-ed with `q`) |
-| `per_page` (1–100, default 15), `page` | pagination |
+| Param | Meaning | Example |
+| --- | --- | --- |
+| `q` | free text, matched against `first_name`, `last_name`, `clinic_name`, `location`, `speciality`, `county` | correct a misheard city: [`?q=Bukalest`](http://wonderful-task.test/api/doctors?q=Bukalest)<br>correct several words at once: [`?q=Popesku Bukalest`](http://wonderful-task.test/api/doctors?q=Popesku%20Bukalest) |
+| `clinic_name`, `speciality`, `county`, `location` | exact, scoped filters (AND-ed with `q`), each corrected on its own column | filter by speciality and county: [`?speciality=Kardiology&county=Cluj`](http://wonderful-task.test/api/doctors?speciality=Kardiology&county=Cluj) |
+| `per_page` (1–100, default 15), `page` | pagination | filter by clinic and paginate: [`?clinic_name=Clinica Brasov Care&per_page=5&page=2`](http://wonderful-task.test/api/doctors?clinic_name=Clinica%20Brasov%20Care&per_page=5&page=2) |
+
+The example links target the local Herd host (`http://wonderful-task.test`); the same paths are also linked from the homepage.
 
 Input is validated (`422` on bad values). Results are paginated and ordered by last name, first name, id. `App\Services\DoctorSearch` runs two tiers:
 
