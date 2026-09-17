@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Observers\DoctorObserver;
 use Database\Factories\DoctorFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -34,6 +36,7 @@ use Illuminate\Support\Carbon;
  *
  * @method static Builder<static> search(?string $term)
  */
+#[ObservedBy(DoctorObserver::class)]
 #[Fillable([
     'first_name',
     'last_name',
