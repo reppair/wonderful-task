@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Database\Factories\DoctorFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +31,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read string $full_name
+ *
+ * @method static Builder<static> search(?string $term)
  */
 #[Fillable([
     'first_name',
@@ -72,5 +76,28 @@ class Doctor extends Model
     protected function fullName(): Attribute
     {
         return Attribute::get(fn (): string => "{$this->first_name} {$this->last_name}");
+    }
+
+    /**
+     * @param  Builder<static>  $query
+     * @return Builder<static>
+     */
+    #[Scope]
+    protected function search(Builder $query, ?string $term): Builder
+    {
+        if (blank($term)) {
+            return $query;
+        }
+
+        $pattern = "%{$term}%";
+
+        return $query->where(function (Builder $query) use ($pattern): void {
+            $query->where('first_name', 'like', $pattern)
+                ->orWhere('last_name', 'like', $pattern)
+                ->orWhere('clinic_name', 'like', $pattern)
+                ->orWhere('location', 'like', $pattern)
+                ->orWhere('speciality', 'like', $pattern)
+                ->orWhere('county', 'like', $pattern);
+        });
     }
 }
