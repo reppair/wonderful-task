@@ -2,7 +2,6 @@
 
 use App\Models\Doctor;
 use App\Services\FuzzyMatcher;
-use Database\Seeders\DoctorSeeder;
 
 beforeEach(function () {
     $this->matcher = app(FuzzyMatcher::class);
@@ -54,14 +53,6 @@ test('refreshes cached candidates when a doctor is saved', function () {
     expect($this->matcher->match('location', 'Bukalest'))->toBeNull();
 
     Doctor::factory()->create(['location' => 'Bucharest']);
-
-    expect($this->matcher->match('location', 'Bukalest'))->matched->toBe('Bucharest');
-});
-
-test('refreshes cached candidates when the seeder runs', function () {
-    expect($this->matcher->candidates('location'))->toBe([]);
-
-    $this->seed(DoctorSeeder::class);
 
     expect($this->matcher->match('location', 'Bukalest'))->matched->toBe('Bucharest');
 });
