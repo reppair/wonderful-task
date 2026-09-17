@@ -58,7 +58,7 @@ i.e. roughly one edit per three characters, and inputs of three characters or fe
 
 For a multi-word `q`, the whole phrase is tried first ("Baya Mare" → "Baia Mare"), then each token: tokens already contained in some value are kept as `LIKE`, the others are corrected, and all tokens are AND-ed ("Dobert Bukalest" → Robert in Bucharest). Scoped filters are corrected the same way, per column ("Kardiology" → Cardiology).
 
-Every correction that actually changed the input is reported so the agent can say "did you mean…":
+Every correction that actually changed the input is reported so the agent can say "did you mean…". Corrections ride along in the standard paginated envelope: `meta.fuzzy` sits at the bottom of `meta`, after the usual `current_page` … `total` keys, so existing pagination consumers are unaffected.
 
 ```json
 {
@@ -74,6 +74,10 @@ Every correction that actually changed the input is reported so the agent can sa
 ```
 
 `meta.fuzzy` is always present: an empty list means the results are literal matches.
+
+A real response for `GET /api/doctors?q=Bukalest` against the full dataset — 170 doctors in Bucharest, with the correction reported below the pagination fields:
+
+![meta.fuzzy at the bottom of the paginated response](docs/images/fuzzy-meta.png)
 
 ## Running locally
 
