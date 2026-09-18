@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Doctor;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 final class DoctorSearch
 {
@@ -86,7 +87,7 @@ final class DoctorSearch
      */
     private function applyFuzzyTerm(Builder $query, string $term): ?Builder
     {
-        $tokens = preg_split('/\s+/', trim($term), -1, PREG_SPLIT_NO_EMPTY);
+        $tokens = Str::of($term)->squish()->explode(' ')->filter()->values()->all();
 
         if (count($tokens) > 1 && ($whole = $this->matcher->matchAny($term)) !== null) {
             $this->recordCorrection($whole);
