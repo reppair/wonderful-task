@@ -21,3 +21,24 @@ test('splits a fuzzy free-text term on any run of whitespace', function (string 
     'newline' => ["Dobert\nBukalest"],
     'surrounding whitespace' => ["  Dobert Bukalest \n"],
 ]);
+
+test('discards partial corrections when a token cannot be corrected', function () {
+    Doctor::factory()->create(['first_name' => 'Robert', 'location' => 'Bucharest']);
+
+    $result = app(DoctorSearch::class)->paginate(['q' => 'Dobert Xyzqwv']);
+
+    expect($result->doctors->total())->toBe(0)
+        ->and($result->corrections)->toBe([]);
+});
+
+test('keeps scoped filter corrections when the free-text term cannot be corrected', function () {
+    Doctor::factory()->create(['first_name' => 'Robert', 'county' => 'Prahova']);
+
+    $result = app(DoctorSearch::class)->paginate(['q' => 'Dobert Xyzqwv', 'county' => 'Prahoba']);
+
+    expect($result->doctors->total())->toBe(0)
+        ->and($result->corrections)->toHaveCount(1)
+        ->and($result->corrections[0])
+        ->column->toBe('county')
+        ->matched->toBe('Prahova');
+});

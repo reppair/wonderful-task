@@ -35,13 +35,14 @@ final class DoctorSearch
             return new DoctorSearchResult($doctors, $this->corrections);
         }
 
+        $scopedCorrections = $this->corrections;
         $fuzzyQuery = $this->applyFuzzyTerm(clone $base, $term);
 
-        if ($fuzzyQuery !== null) {
-            $doctors = $this->run($fuzzyQuery, $perPage);
+        if ($fuzzyQuery === null) {
+            return new DoctorSearchResult($doctors, $scopedCorrections);
         }
 
-        return new DoctorSearchResult($doctors, $this->corrections);
+        return new DoctorSearchResult($this->run($fuzzyQuery, $perPage), $this->corrections);
     }
 
     /**
@@ -80,7 +81,8 @@ final class DoctorSearch
     /**
      * Rebuilds the free-text search as one AND-ed condition per token, correcting the whole
      * phrase or the individual tokens that no column contains. Returns null when a token
-     * cannot be resolved at all, so the caller keeps the original (empty) result.
+     * cannot be resolved at all, so the caller keeps the original (empty) result and drops
+     * the partial corrections recorded along the way.
      *
      * @param  Builder<Doctor>  $query
      * @return Builder<Doctor>|null

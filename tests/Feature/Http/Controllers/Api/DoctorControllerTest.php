@@ -73,7 +73,7 @@ test('combines corrected free-text tokens with AND', function () {
 
 test('matches a correctly spelled multi-word free-text search across columns', function () {
     $match = Doctor::factory()->create(['first_name' => 'Robert', 'location' => 'Bucharest']);
-    Doctor::factory()->create(['first_name' => 'Robert', 'location' => 'Cluj-Napoca']);
+    Doctor::factory()->create(['first_name' => 'Robert', 'location' => 'Cluj-Napoca', 'county' => 'Cluj']);
 
     $this->getJson(route('doctors.index', ['q' => 'Robert Bucharest']))
         ->assertOk()
