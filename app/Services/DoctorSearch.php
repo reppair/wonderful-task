@@ -35,13 +35,13 @@ final class DoctorSearch
             return new DoctorSearchResult($doctors, $this->corrections);
         }
 
-        $tokenQuery = $this->applyFuzzyTerm(clone $base, $term);
+        $fuzzyQuery = $this->applyFuzzyTerm(clone $base, $term);
 
-        if ($tokenQuery === null) {
-            return new DoctorSearchResult($doctors, $this->corrections);
+        if ($fuzzyQuery !== null) {
+            $doctors = $this->run($fuzzyQuery, $perPage);
         }
 
-        return new DoctorSearchResult($this->run($tokenQuery, $perPage), $this->corrections);
+        return new DoctorSearchResult($doctors, $this->corrections);
     }
 
     /**
@@ -89,10 +89,12 @@ final class DoctorSearch
     {
         $tokens = Str::of($term)->squish()->explode(' ')->filter()->values()->all();
 
-        if (count($tokens) > 1 && ($whole = $this->matcher->matchAny($term)) !== null) {
-            $this->recordCorrection($whole);
+        $wholePhrase = count($tokens) > 1 ? $this->matcher->matchAny($term) : null;
 
-            return $query->where($whole->column, $whole->matched);
+        if ($wholePhrase !== null) {
+            $this->recordCorrection($wholePhrase);
+
+            return $query->where($wholePhrase->column, $wholePhrase->matched);
         }
 
         foreach ($tokens as $token) {

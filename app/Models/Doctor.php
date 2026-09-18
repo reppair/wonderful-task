@@ -92,15 +92,10 @@ class Doctor extends Model
             return $query;
         }
 
-        $pattern = "%{$term}%";
-
-        return $query->where(function (Builder $query) use ($pattern): void {
-            $query->where('first_name', 'like', $pattern)
-                ->orWhere('last_name', 'like', $pattern)
-                ->orWhere('clinic_name', 'like', $pattern)
-                ->orWhere('location', 'like', $pattern)
-                ->orWhere('speciality', 'like', $pattern)
-                ->orWhere('county', 'like', $pattern);
-        });
+        return $query->whereAny(
+            ['first_name', 'last_name', 'clinic_name', 'location', 'speciality', 'county'],
+            'like',
+            "%{$term}%",
+        );
     }
 }

@@ -19,27 +19,6 @@ final class FuzzyMatcher
     private const int EXACT_ONLY_MAX_LENGTH = 3;
 
     /**
-     * @return array<int, string>
-     */
-    public function candidates(string $column): array
-    {
-        return $this->allCandidates()[$column] ?? [];
-    }
-
-    public function isKnown(string $column, string $value): bool
-    {
-        $normalized = self::normalize($value);
-
-        foreach ($this->candidates($column) as $candidate) {
-            if (self::normalize($candidate) === $normalized) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Whether any candidate in any column contains the term, mirroring a LIKE %term% query.
      */
     public function contains(string $term): bool
@@ -145,6 +124,14 @@ final class FuzzyMatcher
         }
 
         return intdiv(max(strlen($input), strlen($candidate)), 3);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function candidates(string $column): array
+    {
+        return $this->allCandidates()[$column] ?? [];
     }
 
     /**
